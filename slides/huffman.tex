@@ -1,0 +1,126 @@
+\documentclass[table]{beamer}
+
+\usepackage{pgfpages}
+\pgfpagesuselayout{resize to}[a4paper,landscape,border shrink=5mm]
+
+\usetheme{Luebeck}
+\usepackage[utf8]{inputenc}
+
+\title[CS225 Online Video Series: Huffman]{CS225 Online Video Series:
+    Huffman Encoding}
+\author{Chase Geigle}
+\date{\today}
+\institute{University of Illinois at Urbana-Champaign}
+
+\begin{document}
+    \frame{\titlepage}
+
+    \section{Overview}
+    \frame{\tableofcontents}
+
+    \section{Motivation}
+    \begin{frame}
+        \frametitle{Motivation}
+        \begin{itemize}
+            \item<2-> Compression is important:
+            \begin{itemize}
+                \item<3-> Improve ability to transfer over a network
+                (bandwidth may be expensive, connections may be slow, etc)
+                \item<4-> Reduce storage usage
+            \end{itemize}
+            \item<5-> Types of compression:
+            \begin{itemize}
+                \item<6-> \emph{Lossy} encoding
+                \begin{itemize}
+                    \item<7-> JPEG is an example
+                    \item<8-> Not guaranteed to get the same output
+                    bit-for-bit when you decompress!
+                \end{itemize}
+                \item<9-> \emph{Lossless} encoding
+                \begin{itemize}
+                    \item<10-> ZIP and TGZ are examples
+                    \item<11-> PNG too!
+                    \item<12-> \textbf{Guaranteed} to get the \emph{same
+                    output} bit-for-bit when you decompress!
+                    \item<13-> Huffman coding is a form of lossless
+                    compression.
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+    \end{frame}
+
+    \section{Implementation}
+    \begin{frame}
+        \frametitle{Intuition}
+        \begin{itemize}
+            \item<2-> Say we have some text file.
+            \item<3-> There is some kind of redundant (or repeated)
+            information in this file.
+            \item<4-> Moreover, the repetition is uneven (non-uniform) in
+            distribution.
+            \item<5-> \textbf{Key Idea:} If we allocate a \textbf{small
+            number} of bits to frequent things, and a larger number of bits
+            to infrequent things, we can compress the file.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Algorithm}
+        \begin{itemize}
+            \item<2-> Determine how frequently each pattern occurs in the
+            file.
+            \item<3-> Sort the patterns by frequency.
+            \item<4-> Build a tree from the bottom up, starting with the
+            \emph{least frequent} patterns and ending with the most
+            frequent patterns.
+            \item<5-> Depth of a node in the tree is directly proportional
+            to the length of its binary code!
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{An example}
+        feed me more food
+
+        \begin{itemize}
+            \item<2-> Find frequencies:
+
+                {\scriptsize
+                \begin{tabular}{c|c}
+                    f & 2\\
+                    e & 4\\
+                    d & 2\\
+                    \textvisiblespace  & 3\\
+                    m & 2\\
+                    r & 1\\
+                    o & 3\\
+                \end{tabular}
+                }
+            \item <3-> Sort frequencies:
+
+                {\scriptsize
+                \begin{tabular}{c|c}
+                    r & 1\\
+                    f & 2\\
+                    d & 2\\
+                    m & 2\\
+                    \textvisiblespace  & 3\\
+                    o & 3\\
+                    e & 4\\
+                \end{tabular}
+                }
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        \frametitle{An example}
+            \begin{tabular}{c|c}
+                r & 1\\
+                f & 2\\
+                d & 2\\
+                m & 2\\
+                \textvisiblespace  & 3\\
+                o & 3\\
+                e & 4\\
+            \end{tabular}
+    \end{frame}
+\end{document}
