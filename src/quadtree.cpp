@@ -35,7 +35,7 @@ void quadtree::copy_tree(std::unique_ptr<node>& newNode, node* other){
 		copy_tree(newNode->southeast, other->southeast.get());
 		}
 }
-quadtee::node::node(node& other){
+quadtree::node::node(node& other){
 
 	node_dis_ = other.node_dis_;
 	node_start_x_ = other.node_start_x_;
@@ -44,7 +44,7 @@ quadtee::node::node(node& other){
 
 }
 
-quadtree::quadtree(quadtree&& other):root_{nullptr},lenght_{0}{
+quadtree::quadtree(quadtree&& other):root_{nullptr},lengh_{0}{
 	swap(other);
 }
 
@@ -61,12 +61,12 @@ void quadtree::swap(quadtree& other){
 void quadtree::build_tree(const epng::png & source, unsigned d){
 	//if not empty, delete by swapping with empty tree.
 	if (!empty()) {
-		swap(quadtree());
+		std::swap(root_, nullptr);
 	}
-	build_tree(root_, d);
+	build_tree(std::move(root_), d);//do i really need to move?
 }
 
-std::unique_ptr<node> quadtree::build_tree(unique_ptr<node>& curr, unsigned side_length){
+std::unique_ptr<node> quadtree::build_tree(std::unique_ptr<node>& curr, unsigned side_length){
 	if (length_ / (curr->node_dis_ + 1) == 1) {
 		
 		return;
@@ -79,7 +79,7 @@ std::unique_ptr<node> quadtree::build_tree(unique_ptr<node>& curr, unsigned side
 
 const epng::rgba_pixel& quadtree::operator()(unsigned x, unsigned y) const;
 
-png::png quadtree::decompress()const;
+epng::png quadtree::decompress()const;
 
 bool quadtree::empty(){
 	return root_ == nullptr;

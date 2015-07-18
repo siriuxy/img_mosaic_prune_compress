@@ -60,11 +60,12 @@ class quadtree
 	unsigned node_start_y_;
 
 	node(node& other);
+	//also need a child initializer fuction...
     };
 
 //private functions:
-	copy_tree(std::unique_ptr<node> newNode, node* other);
-	std::unique_ptr<node> build_tree(unique_ptr<node> curr, unsigned side_length);
+	void copy_tree(std::unique_ptr<node> newNode, node* other);
+	std::unique_ptr<node> build_tree(std::unique_ptr<node> curr, unsigned side_length);
 
 //private vairaibles:
 	unsigned length_; //side length of the image.
