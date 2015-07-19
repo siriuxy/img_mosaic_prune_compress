@@ -1,8 +1,8 @@
-Grading revision r5691 by lyan5, dated 2015-07-17 23:00:56.00050274 -0500 CDT
+Grading revision r5703 by geigle1, dated 2015-07-17 23:44:20.000590134 -0500 CDT
 Monad Autograder
-Testing mp_qtree at 2015-07-17 23:36:26
+Testing mp_qtree at 2015-07-18 23:31:04
 
-"I can calculate the motions of the heavenly bodies, but not the madness of people." ~ Isaac Newton
+"It is practically impossible to teach good programming to students that have had a prior exposure to BASIC: as potential programmers they are mentally mutilated beyond hope of regeneration." ~ Edsger Dijkstra
 
 Setting up test environment...
 Compiling...
