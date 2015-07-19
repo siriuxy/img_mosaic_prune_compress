@@ -10,6 +10,7 @@
 #include <iostream>
 #include <queue>
 #include <utility>
+#include <stdexcept>
 
 #include "huffman_tree.h"
 
@@ -86,6 +87,27 @@ void huffman_tree::build_tree(const vector<frequency>& frequencies)
      * Finally, when there is a single node left, it is the root. Assign it
      * to the root and you're done!
      */
+
+	//build single_queue
+	for (auto p : frequencies) single_queue.push(std::unique_ptr<node>(new node(p)));	
+	
+	while( ! (single_queue.empty() && merge_queue.size() == 1)){
+		std::cout<<"queue size: "<<single_queue.size()<<
+		", "<<merge_queue.size()<<std::endl;
+		unique_ptr<node> tmpLeft = remove_smallest(single_queue, merge_queue);
+		std::cout<<"queue size before temp: "<<single_queue.size()<<
+		", "<<merge_queue.size()<<std::endl;
+		unique_ptr<node> tmpRight = remove_smallest(single_queue, merge_queue);
+		std::cout<<"queue size before merge: "<<single_queue.size()<<
+		", "<<merge_queue.size()<<std::endl;
+		unique_ptr<node> tmpMerg(new node(tmpLeft->freq.count() + tmpRight->freq.count()));
+		tmpMerg->left = std::move(tmpLeft);
+		tmpMerg->right = std::move(tmpRight);
+		//unique_ptr scope in while loop?
+		merge_queue.push(std::move(tmpMerg));
+	}
+	root_ = std::move(merge_queue.front());
+	merge_queue.pop();
 }
 
 void huffman_tree::build_map(const node* current, vector<bool>& path)
@@ -135,7 +157,24 @@ auto huffman_tree::remove_smallest(
      * smaller of the two queues heads is the smallest item in either of
      * the queues. Return this item after removing it from its queue.
      */
-    return nullptr;
+
+    	std::unique_ptr<node> tmp;
+	/*
+	std::cout<<"values in remove_sm: "<<merge_queue.empty()<<", "
+					<<single_queue.empty()<<", "
+					<<merge_queue.front()<<", "
+					<<single_queue.front()<<"."<<std::endl;
+	*/
+	if ((!single_queue.empty())&&(merge_queue.empty() || single_queue.front()->freq.count() <= merge_queue.front()->freq.count())){
+		tmp = std::move(single_queue.front());
+		single_queue.pop();
+	}
+	else if ((!merge_queue.empty())&&(single_queue.empty() || single_queue.front()->freq.count() > merge_queue.front()->freq.count())){
+		tmp = std::move(merge_queue.front());
+		merge_queue.pop();
+	}
+	else throw logic_error("error in if logic in remove smallest");
+    return std::move(tmp);//got error (nullptr) when not using move... so i changed..
 }
 
 string huffman_tree::decode_file(binary_file_reader& bfile)
@@ -161,6 +200,21 @@ void huffman_tree::decode(stringstream& ss, binary_file_reader& bfile)
        * character to the stringstream (with operator<<, just like cout)
        * and start traversing from the root node again.
        */
+		if (!(current->left||current->right)){//actually, if no 1 child, then no child.... 
+			ss<<(current->freq.character());
+			current = root_.get();
+		}
+		else if (current->left&&current->right) {
+			auto direction = bfile.next_bit();
+			if (direction){ // ==0
+				current = current->left.get();
+			}
+			else if(!direction){// ==1
+				current = current->right.get();
+			}
+			else throw logic_error("err in inner logic of decode");
+		}
+		else throw std::logic_error("error in if logic in decode()");
     }
 }
 
@@ -204,6 +258,18 @@ void huffman_tree::write_tree(node* current, binary_file_writer& bfile)
      * version: this is fine, as the structure of the tree still reflects
      * what the relative frequencies were.
      */
+
+	if (!(current->left||current->right)){//actually, if no 1 child, then no child.... 
+		bfile.write_bit(1);
+		bfile.write_byte((uint8_t) current->freq.character());
+	}
+	else if (current->left&&current->right) {
+		bfile.write_bit(0);
+		write_tree(current->left.get(), bfile);
+		write_tree(current->right.get(), bfile);
+	}
+	else throw std::runtime_error("write_tree control error");
+
 }
 
 auto huffman_tree::read_tree(binary_file_reader& bfile) -> std::unique_ptr<node>
@@ -225,6 +291,22 @@ auto huffman_tree::read_tree(binary_file_reader& bfile) -> std::unique_ptr<node>
      *     4. Your function should return the node it creates, or nullptr
      *        if it did not create one.
      */
+
+	std::unique_ptr<node> ret = unique_ptr<node>(new node(0));
+	if (!bfile.has_bits()) return nullptr;
+	else {
+		bool nextBitVal = bfile.next_bit();
+		if (nextBitVal) { 
+			ret->freq = frequency(bfile.next_byte(), 0);
+		}
+		else if (!nextBitVal){
+			ret->left = std::move(read_tree(bfile));
+			ret->right = std::move(read_tree(bfile));
+		}
+		else throw std::runtime_error("inner control error");
+
+	}
+	return std::move(ret);
 }
 
 // class for generic printing
