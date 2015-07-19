@@ -92,14 +92,8 @@ void huffman_tree::build_tree(const vector<frequency>& frequencies)
 	for (auto p : frequencies) single_queue.push(std::unique_ptr<node>(new node(p)));	
 	
 	while( ! (single_queue.empty() && merge_queue.size() == 1)){
-		std::cout<<"queue size: "<<single_queue.size()<<
-		", "<<merge_queue.size()<<std::endl;
 		unique_ptr<node> tmpLeft = remove_smallest(single_queue, merge_queue);
-		std::cout<<"queue size before temp: "<<single_queue.size()<<
-		", "<<merge_queue.size()<<std::endl;
 		unique_ptr<node> tmpRight = remove_smallest(single_queue, merge_queue);
-		std::cout<<"queue size before merge: "<<single_queue.size()<<
-		", "<<merge_queue.size()<<std::endl;
 		unique_ptr<node> tmpMerg(new node(tmpLeft->freq.count() + tmpRight->freq.count()));
 		tmpMerg->left = std::move(tmpLeft);
 		tmpMerg->right = std::move(tmpRight);
@@ -187,6 +181,7 @@ string huffman_tree::decode_file(binary_file_reader& bfile)
 void huffman_tree::decode(stringstream& ss, binary_file_reader& bfile)
 {
     auto current = root_.get();
+    bool hasBeenLooped = false;
     while (bfile.has_bits())
     {
       /**
@@ -200,22 +195,37 @@ void huffman_tree::decode(stringstream& ss, binary_file_reader& bfile)
        * character to the stringstream (with operator<<, just like cout)
        * and start traversing from the root node again.
        */
-		if (!(current->left||current->right)){//actually, if no 1 child, then no child.... 
-			ss<<(current->freq.character());
-			current = root_.get();
-		}
-		else if (current->left&&current->right) {
+	hasBeenLooped = true;
+		 if (current->left&&current->right) {
 			auto direction = bfile.next_bit();
-			if (direction){ // ==0
+			//std:cout<<direction<<std::endl;
+			if (!direction){ // ==0
 				current = current->left.get();
 			}
-			else if(!direction){// ==1
+			else if(direction){// ==1
 				current = current->right.get();
 			}
 			else throw logic_error("err in inner logic of decode");
 		}
+		else if (!(current->left||current->right)){//actually, if no 1 child, then no child.... 
+			//std::cout<<"print: "<<current->freq.character()<<std::endl;
+
+			ss<<(current->freq.character());
+			current = root_.get();
+		}
 		else throw std::logic_error("error in if logic in decode()");
     }
+	if (hasBeenLooped){
+		 if (current->left&&current->right) {
+			throw logic_error("err in inner logic of decode");
+		}
+
+		else if (!(current->left||current->right)){
+
+			ss<<(current->freq.character());
+			current = root_.get();
+		}
+	}
 }
 
 void huffman_tree::write(const string& data, binary_file_writer& bfile)
