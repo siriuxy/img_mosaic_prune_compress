@@ -1,0 +1,150 @@
+Grading revision r5691 by lyan5, dated 2015-07-17 23:00:56.00050274 -0500 CDT
+Monad Autograder
+Testing mp_qtree.1 at 2015-07-20 00:48:30
+
+"I've seen many balls. Actually, let's do an example without balls." ~ Jack Toole
+
+Setting up test environment...
+Compiling...
+================================================================
+src/quadtree.cpp:25:12: error: call to implicitly-deleted copy constructor of 'std::unique_ptr<node>'
+        copy_tree(root_, otherRoot);
+                  ^~~~~
+/class/cs225/lm35/bin/../include/c++/v1/memory:2515:31: note: copy constructor is implicitly deleted because 'unique_ptr<cs225::quadtree::node, std::__1::default_delete<cs225::quadtree::node> >' has a user-declared move constructor
+    _LIBCPP_INLINE_VISIBILITY unique_ptr(unique_ptr&& __u) _NOEXCEPT
+                              ^
+include/quadtree.h:67:39: note: passing argument to parameter 'newNode' here
+        void copy_tree(std::unique_ptr<node> newNode, node* other);
+                                             ^
+src/quadtree.cpp:28:16: error: out-of-line definition of 'copy_tree' does not match any declaration in 'cs225::quadtree'
+void quadtree::copy_tree(std::unique_ptr<node>& newNode, node* other){
+               ^~~~~~~~~
+include/quadtree.h:67:17: note: type of 1st parameter of member declaration does not match definition ('std::unique_ptr<node>' vs 'std::unique_ptr<node> &')
+        void copy_tree(std::unique_ptr<node> newNode, node* other);
+                       ^
+src/quadtree.cpp:32:3: error: call to member function 'copy_tree' is ambiguous
+                copy_tree(newNode->northwest, other->northwest.get());
+                ^~~~~~~~~
+include/quadtree.h:67:7: note: candidate function
+        void copy_tree(std::unique_ptr<node> newNode, node* other);
+             ^
+src/quadtree.cpp:28:16: note: candidate function
+void quadtree::copy_tree(std::unique_ptr<node>& newNode, node* other){
+               ^
+src/quadtree.cpp:33:3: error: call to member function 'copy_tree' is ambiguous
+                copy_tree(newNode->northeast, other->northeast.get());
+                ^~~~~~~~~
+include/quadtree.h:67:7: note: candidate function
+        void copy_tree(std::unique_ptr<node> newNode, node* other);
+             ^
+src/quadtree.cpp:28:16: note: candidate function
+void quadtree::copy_tree(std::unique_ptr<node>& newNode, node* other){
+               ^
+src/quadtree.cpp:34:3: error: call to member function 'copy_tree' is ambiguous
+                copy_tree(newNode->southwest, other->southwest.get());
+                ^~~~~~~~~
+include/quadtree.h:67:7: note: candidate function
+        void copy_tree(std::unique_ptr<node> newNode, node* other);
+             ^
+src/quadtree.cpp:28:16: note: candidate function
+void quadtree::copy_tree(std::unique_ptr<node>& newNode, node* other){
+               ^
+src/quadtree.cpp:35:3: error: call to member function 'copy_tree' is ambiguous
+                copy_tree(newNode->southeast, other->southeast.get());
+                ^~~~~~~~~
+include/quadtree.h:67:7: note: candidate function
+        void copy_tree(std::unique_ptr<node> newNode, node* other);
+             ^
+src/quadtree.cpp:28:16: note: candidate function
+void quadtree::copy_tree(std::unique_ptr<node>& newNode, node* other){
+               ^
+src/quadtree.cpp:47:53: error: initializer 'lengh_' does not name a non-static data member or base class; did you mean the member 'length_'?
+quadtree::quadtree(quadtree&& other):root_{nullptr},lengh_{0}{
+                                                    ^~~~~~
+                                                    length_
+include/quadtree.h:71:11: note: 'length_' declared here
+        unsigned length_; //side length of the image.
+                 ^
+src/quadtree.cpp:47:38: warning: field 'root_' will be initialized after field 'length_' [-Wreorder]
+quadtree::quadtree(quadtree&& other):root_{nullptr},lengh_{0}{
+                                     ^
+src/quadtree.cpp:64:3: error: no matching function for call to 'swap'
+                std::swap(root_, nullptr);
+                ^~~~~~~~~
+/class/cs225/lm35/bin/../include/c++/v1/type_traits:3308:1: note: candidate template ignored: deduced conflicting types for parameter '_Tp' ('std::__1::unique_ptr<cs225::quadtree::node, std::__1::default_delete<cs225::quadtree::node> >' vs. 'nullptr_t')
+swap(_Tp& __x, _Tp& __y) _NOEXCEPT_(is_nothrow_move_constructible<_Tp>::value &&
+^
+/class/cs225/lm35/bin/../include/c++/v1/utility:218:1: note: candidate template ignored: could not match '_Tp [_Np]' against 'std::unique_ptr<node>'
+swap(_Tp (&__a)[_Np], _Tp (&__b)[_Np]) _NOEXCEPT_(__is_nothrow_swappable<_Tp>::value)
+^
+/class/cs225/lm35/bin/../include/c++/v1/utility:456:1: note: candidate template ignored: could not match 'pair' against 'unique_ptr'
+swap(pair<_T1, _T2>& __x, pair<_T1, _T2>& __y)
+^
+/class/cs225/lm35/bin/../include/c++/v1/tuple:173:6: note: candidate template ignored: could not match '__tuple_leaf' against 'unique_ptr'
+void swap(__tuple_leaf<_Ip, _Hp, _Ep>& __x, __tuple_leaf<_Ip, _Hp, _Ep>& __y)
+     ^
+/class/cs225/lm35/bin/../include/c++/v1/tuple:702:1: note: candidate template ignored: could not match 'tuple' against 'unique_ptr'
+swap(tuple<_Tp...>& __t, tuple<_Tp...>& __u)
+^
+/class/cs225/lm35/bin/../include/c++/v1/memory:2385:1: note: candidate template ignored: could not match '__compressed_pair' against 'unique_ptr'
+swap(__compressed_pair<_T1, _T2>& __x, __compressed_pair<_T1, _T2>& __y)
+^
+/class/cs225/lm35/bin/../include/c++/v1/memory:2874:1: note: candidate template ignored: could not match 'unique_ptr<type-parameter-0-0, type-parameter-0-1>' against 'nullptr_t'
+swap(unique_ptr<_Tp, _Dp>& __x, unique_ptr<_Tp, _Dp>& __y) _NOEXCEPT {__x.swap(__y);}
+^
+/class/cs225/lm35/bin/../include/c++/v1/memory:4861:1: note: candidate template ignored: could not match 'shared_ptr' against 'unique_ptr'
+swap(shared_ptr<_Tp>& __x, shared_ptr<_Tp>& __y) _NOEXCEPT
+^
+/class/cs225/lm35/bin/../include/c++/v1/memory:5150:1: note: candidate template ignored: could not match 'weak_ptr' against 'unique_ptr'
+swap(weak_ptr<_Tp>& __x, weak_ptr<_Tp>& __y) _NOEXCEPT
+^
+/class/cs225/lm35/bin/../include/c++/v1/string:4113:1: note: candidate template ignored: could not match 'basic_string' against 'unique_ptr'
+swap(basic_string<_CharT, _Traits, _Allocator>& __lhs,
+^
+/class/cs225/lm35/bin/../include/c++/v1/__mutex_base:254:1: note: candidate template ignored: could not match 'unique_lock' against 'unique_ptr'
+swap(unique_lock<_Mutex>& __x, unique_lock<_Mutex>& __y) _NOEXCEPT
+^
+/class/cs225/lm35/bin/../include/c++/v1/functional:1815:1: note: candidate template ignored: could not match 'function' against 'unique_ptr'
+swap(function<_Rp(_ArgTypes...)>& __x, function<_Rp(_ArgTypes...)>& __y) _NOEXCEPT
+^
+/class/cs225/lm35/bin/../include/c++/v1/__bit_reference:87:1: note: candidate template ignored: could not match '__bit_reference' against 'unique_ptr'
+swap(__bit_reference<_Cp> __x, __bit_reference<_Cp> __y) _NOEXCEPT
+^
+/class/cs225/lm35/bin/../include/c++/v1/__bit_reference:97:1: note: candidate template ignored: could not match '__bit_reference' against 'unique_ptr'
+swap(__bit_reference<_Cp> __x, __bit_reference<_Dp> __y) _NOEXCEPT
+^
+/class/cs225/lm35/bin/../include/c++/v1/__bit_reference:107:1: note: candidate template ignored: could not match '__bit_reference' against 'unique_ptr'
+swap(__bit_reference<_Cp> __x, bool& __y) _NOEXCEPT
+^
+/class/cs225/lm35/bin/../include/c++/v1/__bit_reference:117:1: note: candidate template ignored: could not match '__bit_reference<type-parameter-0-0, __has_storage_type<type-parameter-0-0>::value>' against 'nullptr_t'
+swap(bool& __x, __bit_reference<_Cp> __y) _NOEXCEPT
+^
+src/quadtree.cpp:61:45: warning: unused parameter 'source' [-Wunused-parameter]
+void quadtree::build_tree(const epng::png & source, unsigned d){
+                                            ^
+src/quadtree.cpp:69:17: error: use of undeclared identifier 'node'
+std::unique_ptr<node> quadtree::build_tree(std::unique_ptr<node>& curr, unsigned side_length){
+                ^
+src/quadtree.cpp:72:3: error: non-void function 'build_tree' should return a value [-Wreturn-type]
+                return;
+                ^
+src/quadtree.cpp:80:35: error: out-of-line declaration of a member must be a definition [-Wout-of-line-declaration]
+const epng::rgba_pixel& quadtree::operator()(unsigned x, unsigned y) const;
+                        ~~~~~~~~~~^
+src/quadtree.cpp:82:21: error: out-of-line declaration of a member must be a definition [-Wout-of-line-declaration]
+epng::png quadtree::decompress()const;
+          ~~~~~~~~~~^
+2 warnings and 12 errors generated.
+make: *** [quadtree.o] Error 1
+make: *** Waiting for unfinished jobs....
+
+
+Running tests...
+================================================================
+Could not execute test cases
+
+
+Total score...
+================================================================
+TOTAL SCORE: 0
+
