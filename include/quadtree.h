@@ -32,9 +32,11 @@ class quadtree
 	const epng::rgba_pixel& operator() (unsigned x, unsigned y) const;
 	epng::png decompress()const;
 
+	void rotate_clockwise();
 
-
-
+	void prune(unsigned tolerance);
+	unsigned pruned_size(unsigned tolerance)const;
+	unsigned ideal_prune(unsigned leaves)const;
 
   private:
     /**
@@ -53,6 +55,9 @@ class quadtree
 	void colorFiller(epng::png& output);
 	auto nodeFinder(unsigned x, unsigned y)const ->node*;
 
+	void rotate_node_clockwise();
+	void node_prune(unsigned tolerance, int& pruned_size);//if pruned_size == -1, we do actually prune, and don't worry about the pruned_size value.
+
         std::unique_ptr<node> northwest;
         std::unique_ptr<node> northeast;
         std::unique_ptr<node> southwest;
@@ -69,7 +74,6 @@ class quadtree
     std::unique_ptr<node> root_; // the root of the tree
 
 	unsigned res_;
-
 /**** Do not remove this line or copy its contents here! ****/
 #include "quadtree_given.h"
 };
