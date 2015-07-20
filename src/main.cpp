@@ -46,9 +46,9 @@ int main()
     fullTree2 = fullTree;
     imgOut = fullTree2.decompress();
     imgOut.save("outCopy.png");
-/*
+
     // test clockwiseRotate
-    fullTree.rotate_clockwise();
+fullTree.rotate_clockwise();
     imgOut = fullTree.decompress();
     imgOut.save("outRotated.png");
 
@@ -57,7 +57,7 @@ int main()
     fullTree.prune(1000);
     imgOut = fullTree.decompress();
     imgOut.save("outPruned.png");
-*/
+
 /*
     // test several functions in succession
     quadtree fullTree3(fullTree2);

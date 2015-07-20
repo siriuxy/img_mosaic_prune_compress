@@ -15,8 +15,6 @@ namespace cs225
 {
 
 quadtree::node::node(node &other){//deep copy of the quadtree:
-	x_ = other.x_;
-	y_ = other.y_;
 	length_ = other.length_;
 	element = other.element;
 	if (other.northwest) northwest = std::unique_ptr<node>(new node(*other.northwest.get()));
@@ -25,8 +23,6 @@ quadtree::node::node(node &other){//deep copy of the quadtree:
 	if (other.southeast) southeast = std::unique_ptr<node>(new node(*other.southeast.get()));
 }
 
-quadtree::node::node(unsigned x, unsigned y, unsigned length):x_{x},y_{y},length_{length}{
-}
 
 quadtree::quadtree():root_{nullptr}, res_{ 0}{
 }
@@ -72,34 +68,30 @@ void quadtree::build_tree(const epng::png& source, unsigned d){
 quadtree::node::node(const epng::png& source, unsigned x, unsigned y, unsigned d){
 	if (d == 1) {
 		length_ = 1;
-		x_ = x;
-		y_ = y;
-		element = *source(x_, y_);
+		element = *source(x, y);
 		return;
 	}
 	else {
 		//std::cout<<"current d is: "<<d<<endl;
 		length_ = d;
-		x_ = x;
-		y_ = y;
 		d = d/2;
-		northwest = std::unique_ptr<node>(new node(source, x_, y_, d));
-		northeast = std::unique_ptr<node>(new node(source, x_+d, y_, d));
-		southwest = std::unique_ptr<node>(new node(source, x_, y_+d, d));
-		southeast = std::unique_ptr<node>(new node(source, x_+d, y_+d, d));
+		northwest = std::unique_ptr<node>(new node(source, x, y, d));
+		northeast = std::unique_ptr<node>(new node(source, x+d, y, d));
+		southwest = std::unique_ptr<node>(new node(source, x, y+d, d));
+		southeast = std::unique_ptr<node>(new node(source, x+d, y+d, d));
 
-		element.red = 1/4 * (northwest->element.red +
+		element.red = (northwest->element.red +
 					northeast->element.red +
 					southwest->element.red +
-					southeast->element.red);
-		element.green = 1/4 * (northwest->element.green +
+					southeast->element.red)/4;
+		element.green = (northwest->element.green +
 					northeast->element.green +
 					southwest->element.green +
-					southeast->element.green);	
-		element.blue = 1/4 * (northwest->element.blue +
+					southeast->element.green)/4;	
+		element.blue =  (northwest->element.blue +
 					northeast->element.blue +
 					southwest->element.blue +
-					southeast->element.blue);
+					southeast->element.blue)/4;
 	}
 }
 
@@ -110,19 +102,21 @@ const epng::rgba_pixel& quadtree::operator()(unsigned x, unsigned y)const{
 auto quadtree::node::nodeFinder(unsigned x, unsigned y)const ->node*{
 	bool north = false;
 	bool west = false;
-	if (x < x_ + length_/2){
+	if (x <  length_/2){
 		west = true;
 	}
-	else if (x_ + length_/2 <= x && x < x_ + length_){
+	else if (length_/2 <= x && x < length_){
 		west = false;
+		x = x - length_/2;
 	}
 	else throw std::out_of_range("duh, access x out of range");
 	
-	if (y < y_ + length_/2){
+	if (y < length_/2){
 		north = true;
 	}
-	else if (y_ + length_/2 <= y && y < y_ + length_){
+	else if (length_/2 <= y && y < length_){
 		north = false;
+		y = y - length_/2;
 	}
 	else throw std::out_of_range("duh, access y out of range");
 	
@@ -137,48 +131,61 @@ auto quadtree::node::nodeFinder(unsigned x, unsigned y)const ->node*{
 epng::png quadtree::decompress()const{
 	if (!root_) throw std::runtime_error("tree empty, cannot decompress()");
 	epng::png ret(res_, res_);
-	root_.get()->colorFiller(ret);
+	root_.get()->colorFiller(ret, 0, 0);
+//	cout<<root_.get()->element.red<<endl;
 	return ret;
 }
 
-void quadtree::node::colorFiller(epng::png& output){
+void quadtree::node::colorFiller(epng::png& output, unsigned x, unsigned y){
 	//base case is when all of its child is nullptr
 	if (!northwest){//others should be null too! maybe leave a test here?
-		//cout<<"current x, y are: "<<x_<<", "<<y_<<endl;
-		*output(x_, y_) = element;
+	//	cout<<"current r, g are: "<<element.red<<", "<<int(element.blue)<<endl;
+		for (unsigned i = 0; i < length_; i++){
+			for (unsigned j = 0; j < length_; j++){
+				*output(i+x, j+y) = element;
+				}
+			}
 	}
 	else {
 		//cout<<"non operational x y: "<<x_<<", "<<y_<<endl;
-		northwest->colorFiller(output);
-		northeast->colorFiller(output);
-		southwest->colorFiller(output);
-		southeast->colorFiller(output);
+		northwest->colorFiller(output, x, y);
+		northeast->colorFiller(output, x+length_/2, y);
+		southwest->colorFiller(output, x, y + length_/2);
+		southeast->colorFiller(output, x+length_/2, y+length_/2);
 	}
 }
 
 void quadtree::rotate_clockwise(){
 	if (!root_) throw std::runtime_error("cannot rotate empty img");
-	root_.get()->rotate_node_clockwise();//awkaward.. TODO: change signature later to no param
+	root_.get()->rotate_node_clockwise();
 }
 
 void quadtree::node::rotate_node_clockwise(){
-	if (!northwest) return;//cannot use this as nullptr, it seems...
+	if (!northwest) {
+	//	cout<<"reached the end"<<endl;
+		return;//cannot use this as nullptr, it seems...
+	}
 	else {
-		northwest.get()->rotate_node_clockwise();
-		northeast.get()->rotate_node_clockwise();
-		southwest.get()->rotate_node_clockwise();
-		southeast.get()->rotate_node_clockwise();
+	//	cout<<"reached parent nod"<<endl;
 
-		std::unique_ptr<node> tmp = std::move(northwest);
+cout<<"before"<<northeast->element.red<<endl;
+		std::unique_ptr<node> tmp = std::move(northwest);		
 		northwest = std::move(southwest);
 		southwest = std::move(southeast);
 		southeast = std::move(northeast);
 		northeast = std::move(tmp);
+
+cout<<"after"<<northeast->element.red<<endl;
+	northwest.get()->rotate_node_clockwise();
+	northeast.get()->rotate_node_clockwise();
+	southwest.get()->rotate_node_clockwise();
+	southeast.get()->rotate_node_clockwise();
 	}
 }
 
 void quadtree::prune(unsigned tolerance){
 	int do_prune = -1;
+	//cout<<root_.get()->element.red<<", "<<root_.get()->element.blue<<endl;
 	root_.get()->node_prune(tolerance, do_prune);	
 }
 
@@ -189,31 +196,66 @@ unsigned quadtree::pruned_size(unsigned tolerance) const{
 }
 
 void quadtree::node::node_prune(unsigned tolerance, int& pruned_size){
+	//cout<<element.red;
 	if (!northwest) {
+		if (pruned_size != -1) pruned_size += 1;
+		return;
+	}
+//	cout<<int(element.blue)<<endl;
+	northwest->node_prune(tolerance, pruned_size);
+	northeast->node_prune(tolerance, pruned_size);
+	southwest->node_prune(tolerance, pruned_size);
+	southeast->node_prune(tolerance, pruned_size);
+
+	if (check_tolerance(northwest.get(), tolerance) 
+		&& check_tolerance(northeast.get(), tolerance) 
+		&& check_tolerance(southwest.get(), tolerance)
+		&& check_tolerance(southeast.get(), tolerance)) {
+			if (pruned_size == -1) {
+				northwest = nullptr;
+				northeast = nullptr;
+				southwest = nullptr;
+				southeast = nullptr;
+			}
+			else pruned_size -= 3; //it would be at least 4 before minus 3
+		}
+	else  if (pruned_size != -1) pruned_size += 1;
+}
+
+bool quadtree::node::check_tolerance(node* b, unsigned tolerance){
+//	cout<<element.bluel;
+	double sumSquareDiff = pow(abs(element.red - b->element.red), 2) 
+			+ pow(abs(element.blue - b->element.blue), 2)
+			+ pow(abs(element.green - b->element.green), 2);
+
+	return (sumSquareDiff - tolerance) <= 0;
+}
+
+/*	if (!northwest) {
 		if (pruned_size != -1) pruned_size += 1;
 		cout<<"reached unmodified pix"<<endl;
 		return; //base case
 	}
 
-	int tr = element.red;
-	int tb = element.blue;
-	int tg = element.green;
+	int tr = int(element.red);
+	int tb = int(element.blue);
+	int tg = int(element.green);
 	
-	int ner = northeast->element.red;
-	int neb = northeast->element.blue;
-	int neg = northeast->element.green;
+	int ner = int(northeast->element.red);
+	int neb = int(northeast->element.blue);
+	int neg = int(northeast->element.green);
 
-	int nwr = northwest->element.red;
-	int nwb = northwest->element.blue;
-	int nwg = northwest->element.green;
+	int nwr = int(northwest->element.red);
+	int nwb = int(northwest->element.blue);
+	int nwg = int(northwest->element.green);
 
-	int swr = southwest->element.red;
-	int swb = southwest->element.blue;
-	int swg = southwest->element.green;
+	int swr = int(southwest->element.red);
+	int swb = int(southwest->element.blue);
+	int swg = int(southwest->element.green);
 
-	int ser = southeast->element.red;
-	int seb = southeast->element.blue;
-	int seg = southeast->element.green;
+	int ser = int(southeast->element.red);
+	int seb = int(southeast->element.blue);
+	int seg = int(southeast->element.green);
 
 	double dne = pow((tr - ner), 2) + pow((tb - neb), 2) + pow((tg - neg), 2) - (double) tolerance;
 	double dnw = pow((tr - nwr), 2) + pow((tb - nwb), 2) + pow((tg - nwg), 2) - (double) tolerance;
@@ -221,6 +263,7 @@ void quadtree::node::node_prune(unsigned tolerance, int& pruned_size){
 	double dsw = pow((tr - swr), 2) + pow((tb - swb), 2) + pow((tg - swg), 2) - (double) tolerance;
 	cout<<"tr, ner, nwr, swr"<<tr<<","<<ner<<","<<nwr<<","<<swr<<endl;
 	cout<<element.red<<endl;
+	cout<<int(element.red)<<endl;
 	cout<<"dne, dnw .. "<<dne<<", "<<dnw<<", "<<dse<<endl;
 	if (dne>0||dnw>0||dse>0||dsw>0){
 		if (!(pruned_size == -1)) pruned_size += 1;
@@ -229,7 +272,7 @@ void quadtree::node::node_prune(unsigned tolerance, int& pruned_size){
 	southwest.get()->node_prune(tolerance, pruned_size);
 	southeast.get()->node_prune(tolerance, pruned_size);
 	}
-	else if (dne<=0&&dnw<=0&&dse<=0&&dsw<=0){
+	else if (dne<=0&&dnw<=0&&dse<=0&&dsw<=0&& !(northwest->northwest)){
 		if(pruned_size == -1){
 			northeast = nullptr;
 			northwest = nullptr;
@@ -241,6 +284,6 @@ void quadtree::node::node_prune(unsigned tolerance, int& pruned_size){
 		}
 	}
 	else throw std::runtime_error("node_prune logic error");
-}
+}*/
 }
 

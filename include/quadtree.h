@@ -52,11 +52,13 @@ class quadtree
 	node(unsigned x, unsigned y, unsigned length);
 	node(const epng::png& source, unsigned x, unsigned y, unsigned length);
 	
-	void colorFiller(epng::png& output);
+	void colorFiller(epng::png& output, unsigned x, unsigned y);
 	auto nodeFinder(unsigned x, unsigned y)const ->node*;
 
 	void rotate_node_clockwise();
 	void node_prune(unsigned tolerance, int& pruned_size);//if pruned_size == -1, we do actually prune, and don't worry about the pruned_size value.
+	
+	bool check_tolerance(node*, unsigned);
 
         std::unique_ptr<node> northwest;
         std::unique_ptr<node> northeast;
@@ -65,8 +67,6 @@ class quadtree
 
         epng::rgba_pixel element; // the pixel stored as this node's "data"
 
-	unsigned x_;
-	unsigned y_;
 	unsigned length_;
 
     };
