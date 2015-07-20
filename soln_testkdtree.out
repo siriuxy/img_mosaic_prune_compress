@@ -1,0 +1,204 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_smaller_in_dimension() - (constructor must not crash on empty vector)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+smaller_in_dimension(a, b, 0) = true
+smaller_in_dimension(a, b, 2) = false
+smaller_in_dimension(a, b, 1) = true
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_should_replace() - (constructor must not crash on empty vector)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+should_replace(target, curr_best1, possible_best1) = true
+should_replace(target, curr_best2, possible_best2) = false
+should_replace(target, curr_best3, possible_best3) = false
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_linear_ctor<1>(10) - constructs a 1D tree of points 0 through 9
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~  Tree Diagram  ~    ~    ~    ~    ~    ~    ~
+            __(4)__                
+         __/       \__             
+      (1)             (7)          
+     /   \           /   \         
+  (0)     (2)     (5)     (8)      
+            \       \       \      
+            (3)     (6)     (9)    
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_linear_nns<1>(10) - find_nearest_neighbor on a 1D tree of elements 0 to 9
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+find_nearest_neighbor((0)) = (0)
+find_nearest_neighbor((1)) = (1)
+find_nearest_neighbor((2)) = (2)
+find_nearest_neighbor((3)) = (3)
+find_nearest_neighbor((4)) = (4)
+find_nearest_neighbor((5)) = (5)
+find_nearest_neighbor((6)) = (6)
+find_nearest_neighbor((7)) = (7)
+find_nearest_neighbor((8)) = (8)
+find_nearest_neighbor((9)) = (9)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_linear_ctor<3>(31) - constructs a 3D tree of points 0 through 30
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~  Tree Diagram  ~    ~    ~    ~    ~    ~    ~
+                              (15,                                 
+                               15,                                 
+                        ______ 15)_____                            
+                 ______/               \______                     
+              (7,                             (23,                 
+               7,                              23,                 
+            __ 7)__                         __ 23)_                
+         __/       \__                   __/       \__             
+      (3,             (11,            (19,            (27,         
+       3,              11,             19,             27,         
+       3)              11)             19)             27)         
+     /   \           /   \           /   \           /   \         
+  (1,     (5,     (9,     (13,    (17,    (21,    (25,    (29,     
+   1,      5,      9,      13,     17,     21,     25,     29,     
+   1)      5)      9)      13)     17)     21)     25)     29)     
+  / \     / \     / \     / \     / \     / \     / \     / \      
+(0, (2, (4, (6, (8, (10,(12,(14,(16,(18,(20,(22,(24,(26,(28,(30,   
+ 0,  2,  4,  6,  8,  10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,   
+ 0)  2)  4)  6)  8)  10) 12) 14) 16) 18) 20) 22) 24) 26) 28) 30)   
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_linear_nns<3>(31) - find_nearest_neighbor on a 3D tree of elements 0 to 30
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+find_nearest_neighbor((0, 0, 0)) = (0, 0, 0)
+find_nearest_neighbor((1, 1, 1)) = (1, 1, 1)
+find_nearest_neighbor((2, 2, 2)) = (2, 2, 2)
+find_nearest_neighbor((3, 3, 3)) = (3, 3, 3)
+find_nearest_neighbor((4, 4, 4)) = (4, 4, 4)
+find_nearest_neighbor((5, 5, 5)) = (5, 5, 5)
+find_nearest_neighbor((6, 6, 6)) = (6, 6, 6)
+find_nearest_neighbor((7, 7, 7)) = (7, 7, 7)
+find_nearest_neighbor((8, 8, 8)) = (8, 8, 8)
+find_nearest_neighbor((9, 9, 9)) = (9, 9, 9)
+find_nearest_neighbor((10, 10, 10)) = (10, 10, 10)
+find_nearest_neighbor((11, 11, 11)) = (11, 11, 11)
+find_nearest_neighbor((12, 12, 12)) = (12, 12, 12)
+find_nearest_neighbor((13, 13, 13)) = (13, 13, 13)
+find_nearest_neighbor((14, 14, 14)) = (14, 14, 14)
+find_nearest_neighbor((15, 15, 15)) = (15, 15, 15)
+find_nearest_neighbor((16, 16, 16)) = (16, 16, 16)
+find_nearest_neighbor((17, 17, 17)) = (17, 17, 17)
+find_nearest_neighbor((18, 18, 18)) = (18, 18, 18)
+find_nearest_neighbor((19, 19, 19)) = (19, 19, 19)
+find_nearest_neighbor((20, 20, 20)) = (20, 20, 20)
+find_nearest_neighbor((21, 21, 21)) = (21, 21, 21)
+find_nearest_neighbor((22, 22, 22)) = (22, 22, 22)
+find_nearest_neighbor((23, 23, 23)) = (23, 23, 23)
+find_nearest_neighbor((24, 24, 24)) = (24, 24, 24)
+find_nearest_neighbor((25, 25, 25)) = (25, 25, 25)
+find_nearest_neighbor((26, 26, 26)) = (26, 26, 26)
+find_nearest_neighbor((27, 27, 27)) = (27, 27, 27)
+find_nearest_neighbor((28, 28, 28)) = (28, 28, 28)
+find_nearest_neighbor((29, 29, 29)) = (29, 29, 29)
+find_nearest_neighbor((30, 30, 30)) = (30, 30, 30)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_deceptive_nn_one_level() - tests for nearest neighbors across the dividing line
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              (-5,                 
+            __ 0)__                
+         __/       \__             
+      (-13,           (14,         
+       -1)             2)          
+         \           /   \         
+          (-15,   (14,    (6,      
+           7)      -3)     7)      
+  ~    ~    ~    ~    ~    ~    ~
+find_nearest_neighbor((-13, 1)) result   = (-13, -1)
+find_nearest_neighbor((-13, 1)) expected = (-13, -1)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_mines() - tests that you don't look at nodes you don't need to
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              (0,                  
+            __ 7)__                
+         __/       \__             
+      (-3,            {5,          
+       5)              -4}         
+     /   \           /   \         
+  (-6,    (-8,    {2,     {3,      
+   4)      7)      -7}     0}      
+            \       \       \      
+            (-5,    {7,     {6,    
+             6)      -6}     -3}   
+  ~    ~    ~    ~    ~    ~    ~
+find_nearest_neighbor((-7, 5)) result   = (-6, 4)
+find_nearest_neighbor((-7, 5)) expected = (-6, 4)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_deceptive_mines() - tests fence jumping with land mines
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                              (51,                                 
+                        ______ 35)_____                            
+                 ______/               \______                     
+              (44,                            {84,                 
+            __ 43)_                         __ 44}_                
+         __/       \__                   __/       \__             
+      {28,            (43,            {60,            {88,         
+       10}             65)             30}             72}         
+     /   \           /   \           /   \           /   \         
+  {14,    {48,    (42,    (44,    {59,    {74,    {54,    {95,     
+   15}     0}      63)     79)     0}      0}      62}     50}     
+            \               \               \       \       \      
+            {34,            (49,            {82,    {75,    {96,   
+             15}             83)             20}     68}     56}   
+  ~    ~    ~    ~    ~    ~    ~
+find_nearest_neighbor((45, 59)) result   = (42, 63)
+find_nearest_neighbor((45, 59)) expected = (42, 63)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_tie_breaking() - tests operator< used to break ties (building & searching)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              (0,                  
+               100,                
+            __ 100)                
+         __/       \__             
+      (0,             (100,        
+       0,              0,          
+       100)            100)        
+     /   \           /   \         
+  (0,     (0,     (100,   (100,    
+   0,      100,    0,      100,    
+   0)      0)      0)      0)      
+    \     / \     / \     / \      
+    (0, (0, (0, (50,(50,(50,(50,   
+     0,  50, 50, 0,  0,  50, 50,   
+     50) 0)  50) 0)  50) 0)  50)   
+  ~    ~    ~    ~    ~    ~    ~
+Test finds operator< smallest on other side:
+find_nearest_neighbor((50, 100, 0)) result   = (0, 100, 0)
+find_nearest_neighbor((50, 100, 0)) expected = (0, 100, 0)
+
+Test condition for going to other side:
+find_nearest_neighbor((14, 17, 20)) result   = (0, 0, 0)
+find_nearest_neighbor((14, 17, 20)) expected = (0, 0, 0)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_left_recurse() - tests that left recursion doesn't include the root node
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              (5,                  
+               3,                  
+            __ 1)__                
+         __/       \__             
+      (3,             (12,         
+       1,              12,         
+       10)             12)         
+     /   \           /   \         
+  (2,     (4,     (10,    (13,     
+   0,      3,      10,     13,     
+   8)      0)      10)     13)     
+            \       \       \      
+            (0,     (11,    (14,   
+             2,      11,     14,   
+             9)      11)     14)   
+  ~    ~    ~    ~    ~    ~    ~
+find_nearest_neighbor((1, 1, 9)) result   = (0, 2, 9)
+find_nearest_neighbor((1, 1, 9)) expected = (0, 2, 9)
+
