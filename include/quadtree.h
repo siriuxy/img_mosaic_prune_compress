@@ -20,22 +20,19 @@ namespace cs225
 class quadtree
 {
   public:
-
 	quadtree();
-	quadtree(epng::png source, unsigned d);
-	quadtree(quadtree& other);
+	quadtree(const epng::png& source, unsigned d);
+	quadtree(const quadtree& other);
 	quadtree(quadtree&& other);
 	~quadtree() = default;
-
-	quadtree& operator=(quadtree other);
-
+	
 	void swap(quadtree& other);
-	void build_tree(const epng::png & source, unsigned d);
-
-	const epng::rgba_pixel& operator()(unsigned x, unsigned y) const;
+	quadtree& operator=(quadtree other);
+	void build_tree(const epng::png& source, unsigned d);
+	const epng::rgba_pixel& operator() (unsigned x, unsigned y) const;
 	epng::png decompress()const;
 
-	bool empty();
+
 
 
 
@@ -47,7 +44,15 @@ class quadtree
      */
     class node
     {
-      public: //
+      public:
+	node() = default;
+	node(node &other);
+	node(unsigned x, unsigned y, unsigned length);
+	node(const epng::png& source, unsigned x, unsigned y, unsigned length);
+	
+	void colorFiller(epng::png& output);
+	auto nodeFinder(unsigned x, unsigned y)const ->node*;
+
         std::unique_ptr<node> northwest;
         std::unique_ptr<node> northeast;
         std::unique_ptr<node> southwest;
@@ -55,21 +60,16 @@ class quadtree
 
         epng::rgba_pixel element; // the pixel stored as this node's "data"
 
-	unsigned node_dis_;//distance from this node, to root_
-	unsigned node_start_x_;
-	unsigned node_start_y_;
+	unsigned x_;
+	unsigned y_;
+	unsigned length_;
 
-	node(node& other);
-	//also need a child initializer fuction...
     };
 
-//private functions:
-	void copy_tree(std::unique_ptr<node> newNode, node* other);
-	std::unique_ptr<node> build_tree(std::unique_ptr<node> curr, unsigned side_length);
+    std::unique_ptr<node> root_; // the root of the tree
 
-//private vairaibles:
-	unsigned length_; //side length of the image.
-	std::unique_ptr<node> root_; // the root of the tree
+	unsigned res_;
+
 /**** Do not remove this line or copy its contents here! ****/
 #include "quadtree_given.h"
 };
