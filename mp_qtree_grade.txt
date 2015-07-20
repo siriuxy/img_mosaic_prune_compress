@@ -1,8 +1,8 @@
-Grading revision r5703 by geigle1, dated 2015-07-17 23:44:20.000590134 -0500 CDT
+Grading revision r5922 by geigle1, dated 2015-07-18 23:39:31.000194135 -0500 CDT
 Monad Autograder
-Testing mp_qtree at 2015-07-18 23:31:04
+Testing mp_qtree at 2015-07-19 23:26:20
 
-"It is practically impossible to teach good programming to students that have had a prior exposure to BASIC: as potential programmers they are mentally mutilated beyond hope of regeneration." ~ Edsger Dijkstra
+"If I had a 3D Reese's chocolate printer I would use that thing all the time always." ~ Chase Geigle
 
 Setting up test environment...
 Compiling...
