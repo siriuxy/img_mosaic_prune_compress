@@ -8,7 +8,7 @@
 #include "quadtree.h"
 #include <iostream>
 #include <cmath>
-
+#include <stdint.h>
 using std::cout;
 using std::endl;
 namespace cs225
@@ -256,17 +256,17 @@ bool quadtree::node::check_tolerance(const node* b, unsigned tolerance)const{
 
 uint32_t quadtree::ideal_prune(unsigned num_leaves) const{
 		uint32_t min = 0;
-		uint32_t max = 0-1;
-		unsigned currentLeaves = pruned_size(min+max/2);
+		uint32_t max = 3*255*255;
+		unsigned currentLeaves = this->pruned_size(min+max/2);
 	while(1)
 	{	if (currentLeaves > num_leaves){
 			max = min+(max-min)/2;
-			currentLeaves = pruned_size(max);
+			currentLeaves = pruned_size(min+(max-min)/2);
 		}
 		if (currentLeaves < num_leaves){
 			if (min+1 == max) break;
 			min = min+(max-min)/2;
-			currentLeaves = pruned_size(min);
+			currentLeaves = pruned_size(min+(max-min)/2);
 		}
 	}
 		cout<<currentLeaves;
