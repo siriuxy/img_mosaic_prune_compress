@@ -254,6 +254,10 @@ bool quadtree::node::check_tolerance(const node* b, unsigned tolerance)const{
 	return (sumSquareDiff - tolerance) <= 0;
 }
 
+unsigned quadtree::ideal_prune( unsigned num_leaves) const{
+return 0;
+}
+
 /*	if (!northwest) {
 		if (pruned_size != -1) pruned_size += 1;
 		cout<<"reached unmodified pix"<<endl;
