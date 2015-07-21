@@ -58,9 +58,9 @@ class quadtree
 	void rotate_node_clockwise();
 	void node_prune(unsigned tolerance, int& pruned_size);//if pruned_size == -1, we do actually prune, and don't worry about the pruned_size value.
 	
-	bool all_child_check(node*, unsigned, bool);
-	bool check_tolerance(node*, unsigned);
-
+	bool all_child_check(const node*, unsigned, bool)const;
+	bool check_tolerance(const node*, unsigned)const;
+	void prunnable(unsigned tolerance, unsigned& count);
 
         std::unique_ptr<node> northwest;
         std::unique_ptr<node> northeast;

@@ -188,9 +188,20 @@ void quadtree::prune(unsigned tolerance){
 }
 
 unsigned quadtree::pruned_size(unsigned tolerance) const{
-	int pruned_size = 0;
-	root_.get()->node_prune(tolerance, pruned_size);
-	return pruned_size;
+	unsigned count = 0;
+	root_.get()->prunnable(tolerance, count);
+	return count;
+}
+
+void quadtree::node::prunnable(unsigned tolerance, unsigned& count){
+	if (all_child_check(this, tolerance, true)) count += 1;
+	else if (!northwest) count +=1;
+	else{
+		northwest->prunnable(tolerance, count); 
+                northeast->prunnable(tolerance, count); 
+                southwest->prunnable(tolerance, count); 
+                southeast->prunnable(tolerance, count); 
+	}
 }
 
 void quadtree::node::node_prune(unsigned tolerance, int& pruned_size){
@@ -223,7 +234,7 @@ void quadtree::node::node_prune(unsigned tolerance, int& pruned_size){
 
 }
 
-bool quadtree::node::all_child_check(node* c, unsigned tolerance, bool prunable){
+bool quadtree::node::all_child_check(const node* c, unsigned tolerance, bool prunable)const {
 
 	if (this == c && !c->northwest) return false; 
 	if (!c->northwest) return check_tolerance(c, tolerance);
@@ -234,7 +245,7 @@ bool quadtree::node::all_child_check(node* c, unsigned tolerance, bool prunable)
 		&& all_child_check(c->southwest.get(), tolerance, prunable);
 }
 
-bool quadtree::node::check_tolerance(node* b, unsigned tolerance){
+bool quadtree::node::check_tolerance(const node* b, unsigned tolerance)const{
 //	cout<<element.bluel;
 	double sumSquareDiff = pow(abs(element.red - b->element.red), 2) 
 			+ pow(abs(element.blue - b->element.blue), 2)

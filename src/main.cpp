@@ -58,7 +58,7 @@ fullTree.rotate_clockwise();
     imgOut = fullTree.decompress();
     imgOut.save("outPruned.png");
 
-/*
+
     // test several functions in succession
     quadtree fullTree3(fullTree2);
     fullTree3.rotate_clockwise();
@@ -74,6 +74,6 @@ fullTree.rotate_clockwise();
     cout << "Printing tinyTree:\n";
     tinyTree.prune(100);
     tinyTree.print();
-*/
+
     return 0;
 }
