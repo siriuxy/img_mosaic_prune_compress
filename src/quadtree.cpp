@@ -187,7 +187,7 @@ void quadtree::prune(unsigned tolerance){
 	root_.get()->node_prune(tolerance, do_prune);	
 }
 
-unsigned quadtree::pruned_size(unsigned tolerance) const{
+uint64_t quadtree::pruned_size(uint32_t tolerance) const{
 	unsigned count = 0;
 	root_.get()->prunnable(tolerance, count);
 	return count;
@@ -195,7 +195,7 @@ unsigned quadtree::pruned_size(unsigned tolerance) const{
 
 void quadtree::node::prunnable(unsigned tolerance, unsigned& count){
 	if (all_child_check(this, tolerance, true)) count += 1;
-	else if (!northwest) count +=1;
+	else if (!northwest) count+= 1;
 	else{
 		northwest->prunnable(tolerance, count); 
                 northeast->prunnable(tolerance, count); 
@@ -254,12 +254,25 @@ bool quadtree::node::check_tolerance(const node* b, unsigned tolerance)const{
 	return (sumSquareDiff - tolerance) <= 0;
 }
 
-unsigned quadtree::ideal_prune(unsigned num_leaves) const{
-		unsigned min = 0;
-		unsigned max = 0-1;
-	if (num_leaves == 0) throw std::runtime_error("nah don't prune everything");
-	else {
-
+uint32_t quadtree::ideal_prune(unsigned num_leaves) const{
+		uint32_t min = 0;
+		uint32_t max = 0-1;
+		unsigned currentLeaves = pruned_size(min+max/2);
+	while(1)
+	{	if (currentLeaves > num_leaves){
+			max = min+(max-min)/2;
+			currentLeaves = pruned_size(max);
+		}
+		if (currentLeaves < num_leaves){
+			if (min+1 == max) break;
+			min = min+(max-min)/2;
+			currentLeaves = pruned_size(min);
+		}
+	}
+		cout<<currentLeaves;
+		return min;
+}
+/*
 		unsigned currentLeaves = pruned_size((min+max)/2);
 		if (currentLeaves < num_leaves) return max;
 		while (min!=max){
@@ -273,10 +286,9 @@ unsigned quadtree::ideal_prune(unsigned num_leaves) const{
 			}
 			if (min+1 == max) break;
 		}
-	}
-	return 111;
+	return 0;
 }
-
+*/
 /*	if (!northwest) {
 		if (pruned_size != -1) pruned_size += 1;
 		cout<<"reached unmodified pix"<<endl;

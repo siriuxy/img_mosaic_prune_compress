@@ -35,8 +35,8 @@ class quadtree
 	void rotate_clockwise();
 
 	void prune(unsigned tolerance);
-	unsigned pruned_size(unsigned tolerance)const;
-	unsigned ideal_prune(unsigned leaves)const;
+	uint64_t pruned_size(unsigned tolerance)const;
+	uint32_t ideal_prune(unsigned leaves)const;
 
   private:
     /**
