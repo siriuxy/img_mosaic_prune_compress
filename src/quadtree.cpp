@@ -254,8 +254,27 @@ bool quadtree::node::check_tolerance(const node* b, unsigned tolerance)const{
 	return (sumSquareDiff - tolerance) <= 0;
 }
 
-unsigned quadtree::ideal_prune( unsigned num_leaves) const{
-return 0;
+unsigned quadtree::ideal_prune(unsigned num_leaves) const{
+		unsigned min = 0;
+		unsigned max = 0-1;
+	if (num_leaves == 0) throw std::runtime_error("nah don't prune everything");
+	else {
+
+		unsigned currentLeaves = pruned_size((min+max)/2);
+		if (currentLeaves < num_leaves) return max;
+		while (min!=max){
+			if (currentLeaves > num_leaves) {
+				max = min+(max-min)/2;
+				cout<<"has been here"<<endl;
+			}
+			if (currentLeaves < num_leaves){
+				min = min+(max-min)/2;
+			
+			}
+			if (min+1 == max) break;
+		}
+	}
+	return 111;
 }
 
 /*	if (!northwest) {
