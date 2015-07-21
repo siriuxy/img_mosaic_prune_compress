@@ -168,14 +168,12 @@ void quadtree::node::rotate_node_clockwise(){
 	else {
 	//	cout<<"reached parent nod"<<endl;
 
-cout<<"before"<<northeast->element.red<<endl;
 		std::unique_ptr<node> tmp = std::move(northwest);		
 		northwest = std::move(southwest);
 		southwest = std::move(southeast);
 		southeast = std::move(northeast);
 		northeast = std::move(tmp);
 
-cout<<"after"<<northeast->element.red<<endl;
 	northwest.get()->rotate_node_clockwise();
 	northeast.get()->rotate_node_clockwise();
 	southwest.get()->rotate_node_clockwise();
@@ -197,21 +195,17 @@ unsigned quadtree::pruned_size(unsigned tolerance) const{
 
 void quadtree::node::node_prune(unsigned tolerance, int& pruned_size){
 	//cout<<element.red;
+	
 	if (!northwest) {
 		if (pruned_size != -1) pruned_size += 1;
 		return;
 	}
-//	cout<<int(element.blue)<<endl;
-	northwest->node_prune(tolerance, pruned_size);
-	northeast->node_prune(tolerance, pruned_size);
-	southwest->node_prune(tolerance, pruned_size);
-	southeast->node_prune(tolerance, pruned_size);
 
-	if (check_tolerance(northwest.get(), tolerance) 
-		&& check_tolerance(northeast.get(), tolerance) 
-		&& check_tolerance(southwest.get(), tolerance)
-		&& check_tolerance(southeast.get(), tolerance)) {
+//	cout<<int(element.blue)<<endl;
+
+	if (all_child_check(this, tolerance, true)) {
 			if (pruned_size == -1) {
+			//cout<<"entered prune process"<<endl;
 				northwest = nullptr;
 				northeast = nullptr;
 				southwest = nullptr;
@@ -219,7 +213,25 @@ void quadtree::node::node_prune(unsigned tolerance, int& pruned_size){
 			}
 			else pruned_size -= 3; //it would be at least 4 before minus 3
 		}
-	else  if (pruned_size != -1) pruned_size += 1;
+	else  {
+	if (pruned_size != -1) pruned_size += 1;
+	northwest->node_prune(tolerance, pruned_size);
+	northeast->node_prune(tolerance, pruned_size);
+	southwest->node_prune(tolerance, pruned_size);
+	southeast->node_prune(tolerance, pruned_size);
+	}
+
+}
+
+bool quadtree::node::all_child_check(node* c, unsigned tolerance, bool prunable){
+
+	if (this == c && !c->northwest) return false; 
+	if (!c->northwest) return check_tolerance(c, tolerance);
+	else return prunable 
+		&& all_child_check(c->northwest.get(), tolerance, prunable) 
+		&& all_child_check(c->northeast.get(), tolerance, prunable)
+		&& all_child_check(c->southeast.get(), tolerance, prunable)
+		&& all_child_check(c->southwest.get(), tolerance, prunable);
 }
 
 bool quadtree::node::check_tolerance(node* b, unsigned tolerance){
@@ -227,7 +239,7 @@ bool quadtree::node::check_tolerance(node* b, unsigned tolerance){
 	double sumSquareDiff = pow(abs(element.red - b->element.red), 2) 
 			+ pow(abs(element.blue - b->element.blue), 2)
 			+ pow(abs(element.green - b->element.green), 2);
-
+//cout<<sumSquareDiff<<endl;
 	return (sumSquareDiff - tolerance) <= 0;
 }
 
