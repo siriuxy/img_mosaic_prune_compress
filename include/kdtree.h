@@ -21,7 +21,8 @@
 
 #include <cstdint>
 #include <vector>
-
+#include <exception>
+#include <cmath>
 #include "coloredout.h"
 #include "point.h"
 
@@ -153,7 +154,8 @@ class kd_tree
      * @todo This function is required for mp_mosaic.1.
      * @param newpoints The vector of points to build your kd_tree off of.
      */
-    kd_tree(const std::vector<point<Dim>>& newpoints);
+    kd_tree(const std::vector<point<Dim>>& newpoints);//TODO:can i randomize the vector first?
+
 
     /**
      * Finds the closest point to the parameter point in the kd_tree.
@@ -247,6 +249,17 @@ class kd_tree
     /**
      * @todo Add your helper functions here.
      */
+
+//TODO: change them into private after testing
+public:
+	int partition(int start, int end, int pixotIdx, int curDim, std::vector<point<Dim>>& vec);
+	auto select(int start, int end, int curDim, std::vector<point<Dim>>& vec)
+			->point<Dim>;
+	void kdtreefy(int start, int end, int curDim, std::vector<point<Dim>>& newpoints);
+
+	point<Dim> find_nearest_recursively(const point<Dim>& query, int start, int end, int curDim) const;
+
+
 };
 
 #include "kdtree.tcc"

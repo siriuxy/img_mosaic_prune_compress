@@ -79,9 +79,40 @@ void test_should_replace()
     cout << endl;
 }
 
+//my own test for quick_select:
+
+void test_quick_select()
+{
+    point<3> target(1, 3, 5);
+    point<3> curr_best1(1, 3, 2);
+    point<3> curr_best2(1, 3, 6);
+    point<3> curr_best3(0, 2, 4);
+    point<3> possible_best1(2, 4, 4);
+    point<3> possible_best2(2, 4, 4);
+    point<3> possible_best3(2, 4, 6);
+
+//	cout<<"constructing a vector of size 7, expect output (1,3,6)"<<endl;
+    vector<point<3>> pts;
+
+	pts.push_back(target);
+	pts.push_back(curr_best1);
+	pts.push_back(curr_best2);
+	pts.push_back(curr_best3);
+	pts.push_back(possible_best1);
+	pts.push_back(possible_best2);
+	pts.push_back(possible_best3);
+
+    kd_tree<3> tree(pts);
+//    cout<<tree.select(0, 6, 0, pts)<<endl;
+//    cout<<"end of quick_select_test()"<<endl;
+
+}
+
+
 /**
  * Test the kd_tree constructor
  */
+
 template <int K>
 void test_linear_ctor(int size)
 {
@@ -433,14 +464,17 @@ int main(int argc, char** argv)
     // test cases
     test_smaller_in_dimension();
     test_should_replace();
+    test_quick_select();
+   
     test_linear_ctor<1>(10);
     test_linear_nns<1>(10);
     test_linear_ctor<3>(31);
     test_linear_nns<3>(31);
-    test_deceptive_nn_one_level();
+/*    test_deceptive_nn_one_level();
     test_mines();
     test_deceptive_mines();
     test_tie_breaking();
     test_left_recurse();
+  */ 
 }
 
