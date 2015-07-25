@@ -1,0 +1,41 @@
+Grading revision r6726 by lyan5, dated 2015-07-24 16:43:17.000906794 -0500 CDT
+Monad Autograder
+Testing mp_mosaic.1 at 2015-07-25 18:23:26
+
+"Your job is not just what you're doing; it should be preparing you for what you want to do." ~ Michael Lopp
+
+Setting up test environment...
+Compiling...
+================================================================
+
+
+Running tests...
+================================================================
+test_smaller_in_dimension  . . . [4 pts] - passed
+test_should_replace  . . . . . . [4 pts] - passed
+test_linear_ctor_1_10  . . . . . [6 pts] - passed
+test_linear_ctor_3_31  . . . . . [6 pts] - passed
+test_linear_ctor_2_14  . . . . . [6 pts] - passed
+test_linear_nns_1_10 . . . . . . [6 pts] - passed
+test_linear_nns_3_31 . . . . . . [6 pts] - passed
+test_linear_nns_2_14 . . . . . . [6 pts] - passed
+test_deceptive_nn_one_level_ctor [4 pts] - passed
+test_deceptive_nn_one_level_nns  [4 pts] - passed
+test_mines_ctor  . . . . . . . . [4 pts] - passed
+test_mines_nns . . . . . . . . . [4 pts] - passed
+test_deceptive_mines_ctor  . . . [4 pts] - passed
+test_deceptive_mines_nns . . . . [4 pts] - passed
+test_tie_breaking_ctor . . . . . [4 pts] - passed
+test_tie_breaking_nns  . . . . . [4 pts] - passed
+test_left_recurse_ctor . . . . . [4 pts] - passed
+test_left_recurse_nns  . . . . . [4 pts] - passed
+test_random_1_ctor . . . . . . . [4 pts] - passed
+test_random_1_nns  . . . . . . . [4 pts] - passed
+test_random_2_ctor . . . . . . . [4 pts] - passed
+test_random_2_nns  . . . . . . . [4 pts] - passed
+
+
+Total score...
+================================================================
+TOTAL SCORE: 100
+
