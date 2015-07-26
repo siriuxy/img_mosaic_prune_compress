@@ -1,8 +1,8 @@
-Grading revision r6726 by lyan5, dated 2015-07-24 16:43:17.000906794 -0500 CDT
+Grading revision r6964 by geigle1, dated 2015-07-25 18:40:03.000289814 -0500 CDT
 Monad Autograder
-Testing mp_mosaic at 2015-07-25 18:33:54
+Testing mp_mosaic at 2015-07-25 23:38:13
 
-"The sooner you start to code, the longer the program will take." ~ R. Carlson
+"Procrastination: working tomorrow for a better today." ~ Anonymous
 
 Setting up test environment...
 Compiling...
