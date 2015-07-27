@@ -1,34 +1,12 @@
-Grading revision r6964 by geigle1, dated 2015-07-25 18:40:03.000289814 -0500 CDT
+Grading revision r7158 by lyan5, dated 2015-07-26 22:31:27.000353293 -0500 CDT
 Monad Autograder
-Testing mp_mosaic at 2015-07-25 23:38:13
+Testing mp_mosaic at 2015-07-26 23:16:25
 
-"Procrastination: working tomorrow for a better today." ~ Anonymous
+"C++ : Where friends have access to your private members." ~ Gavin Russell Baker
 
 Setting up test environment...
 Compiling...
 ================================================================
-In file included from unit_tests.cpp:515:
-./src/maptiles.cpp:11:45: warning: unused parameter 'source' [-Wunused-parameter]
-mosaic_canvas map_tiles(const source_image& source,
-                                            ^
-./src/maptiles.cpp:12:56: warning: unused parameter 'tiles' [-Wunused-parameter]
-                        const std::vector<tile_image>& tiles)
-                                                       ^
-./src/maptiles.cpp:17:1: warning: control reaches end of non-void function [-Wreturn-type]
-}
-^
-3 warnings generated.
-In file included from unit_tests.cpp:515:
-./src/maptiles.cpp:11:45: warning: unused parameter 'source' [-Wunused-parameter]
-mosaic_canvas map_tiles(const source_image& source,
-                                            ^
-./src/maptiles.cpp:12:56: warning: unused parameter 'tiles' [-Wunused-parameter]
-                        const std::vector<tile_image>& tiles)
-                                                       ^
-./src/maptiles.cpp:17:1: warning: control reaches end of non-void function [-Wreturn-type]
-}
-^
-3 warnings generated.
 
 
 Running tests...
@@ -55,12 +33,12 @@ test_random_1_ctor . . . . . . . [3 pts]  - passed
 test_random_1_nns  . . . . . . . [3 pts]  - passed
 test_random_2_ctor . . . . . . . [3 pts]  - passed
 test_random_2_nns  . . . . . . . [3 pts]  - passed
-test_checkered_mosaic  . . . . . [12 pts] - FAILED
-test_primary_color_mosaic  . . . [6 pts]  - FAILED
-test_random_mosaic . . . . . . . [6 pts]  - FAILED
+test_checkered_mosaic  . . . . . [12 pts] - passed
+test_primary_color_mosaic  . . . [6 pts]  - passed
+test_random_mosaic . . . . . . . [6 pts]  - passed
 
 
 Total score...
 ================================================================
-TOTAL SCORE: 76
+TOTAL SCORE: 100
 
