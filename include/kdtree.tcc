@@ -165,7 +165,6 @@ rec{
 	if base return ;
 	if (smaller) best = rec(subtree, left);
 	else if (larger) best = rec(subtree, right);
-
 	operate on parent level.
 
 }
