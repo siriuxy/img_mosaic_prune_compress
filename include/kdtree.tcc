@@ -90,7 +90,7 @@ void kd_tree<Dim>::kdtreefy(int start, int end, int curDim, std::vector<point<Di
 	//	std::swap(select(start, end, curDim, vec), vec[(start+end)/2]);
 		select(start, end, curDim, vec);
 		
-		if ((start+end)/2-1) kdtreefy(start, (start+end)/2-1, (curDim+1)%Dim, vec);
+		if ((start+end)/2-1 > start) kdtreefy(start, (start+end)/2-1, (curDim+1)%Dim, vec);
 		kdtreefy((start+end)/2+1, end, (curDim+1)%Dim, vec);
 	}
 }
