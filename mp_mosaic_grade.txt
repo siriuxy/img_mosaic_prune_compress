@@ -1,8 +1,8 @@
 Grading revision r7158 by lyan5, dated 2015-07-26 22:31:27.000353293 -0500 CDT
 Monad Autograder
-Testing mp_mosaic at 2015-07-26 23:16:25
+Testing mp_mosaic at 2015-07-31 12:55:30
 
-"C++ : Where friends have access to your private members." ~ Gavin Russell Baker
+"I can calculate the motions of the heavenly bodies, but not the madness of people." ~ Isaac Newton
 
 Setting up test environment...
 Compiling...
